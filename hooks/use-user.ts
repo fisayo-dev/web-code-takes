@@ -1,8 +1,51 @@
 "use client"
 
-import { useContext } from "react"
-import { UserContext } from "@/lib/user-provider"
+import { useEffect, useState } from "react"
+import { getMe } from "@/lib/api"
+import type { User } from "@/lib/types"
+
+let cachedUser: User | null = null
+let fetchPromise: Promise<User | null> | null = null
+
+function fetchUserOnce(): Promise<User | null> {
+  if (fetchPromise) return fetchPromise
+  fetchPromise = getMe()
+    .then((user) => {
+      cachedUser = user
+      return user
+    })
+    .catch(() => {
+      cachedUser = null
+      return null
+    })
+  return fetchPromise
+}
 
 export function useUser() {
-  return useContext(UserContext)
+  const [user, setUser] = useState<User | null>(cachedUser)
+  const [isLoading, setIsLoading] = useState(!cachedUser)
+
+  useEffect(() => {
+    if (cachedUser) return
+
+    let cancelled = false
+    fetchUserOnce().then((u) => {
+      if (!cancelled) {
+        setUser(u)
+        setIsLoading(false)
+      }
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  function reset() {
+    cachedUser = null
+    fetchPromise = null
+    setUser(null)
+    setIsLoading(false)
+  }
+
+  return { user, isLoading, isAuthenticated: !!user, reset }
 }

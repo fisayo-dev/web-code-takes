@@ -12,7 +12,17 @@ import {
 import { Code, SignOut, User as UserIcon } from "@phosphor-icons/react"
 
 export function Navbar() {
-  const { user, logout, isAuthenticated } = useUser()
+  const { user, isAuthenticated, reset } = useUser()
+
+  const handleLogout = async () => {
+    try {
+      const { logout } = await import("@/lib/api")
+      await logout()
+    } finally {
+      reset()
+      window.location.href = "/login"
+    }
+  }
 
   return (
     <header className="neo-card-sm sticky top-0 z-50 bg-white">
@@ -23,7 +33,7 @@ export function Navbar() {
         </Link>
 
         <nav className="flex items-center gap-4">
-          <Link href="/" className="text-xs font-semibold uppercase tracking-wide hover:underline">
+          <Link href="/feed" className="text-xs font-semibold uppercase tracking-wide hover:underline">
             Feed
           </Link>
 
@@ -45,7 +55,7 @@ export function Navbar() {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  onClick={logout}
+                  onClick={handleLogout}
                   className="flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 text-xs text-accent-red hover:bg-muted outline-none"
                 >
                   <SignOut className="size-3.5" />
