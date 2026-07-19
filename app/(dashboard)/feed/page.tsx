@@ -21,7 +21,7 @@ export default function FeedPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="neo-card bg-white p-6">
+      <div className="neo-card bg-card p-6">
         <h1 className="text-xl font-bold uppercase tracking-tight">
           Welcome{user ? `, ${user.name}` : ""}!
         </h1>
@@ -30,7 +30,7 @@ export default function FeedPage() {
         </p>
       </div>
 
-      <div className="neo-card bg-white p-6">
+      <div className="neo-card bg-card p-6">
         <p className="text-xs text-muted-foreground text-center py-8">
           No takes yet. Be the first to post one.
         </p>

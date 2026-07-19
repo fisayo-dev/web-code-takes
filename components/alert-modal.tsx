@@ -49,7 +49,7 @@ export function AlertModal({ open, onClose, type, title, description }: AlertMod
     >
       <div
         className={cn(
-          "relative w-full max-w-sm p-6 neo-card bg-white",
+          "relative w-full max-w-sm p-6 neo-card bg-card",
           type === "success" ? "neo-alert-success" : "neo-alert-error",
         )}
       >

@@ -20,8 +20,8 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cn(
-        "h-full",
+        className={cn(
+        "dark h-full",
         "antialiased",
         geistSans.variable,
         geistMono.variable,

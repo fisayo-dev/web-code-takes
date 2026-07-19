@@ -19,7 +19,7 @@ export function AuthCard({ children, className }: AuthCardProps) {
           </div>
         </div>
 
-        <div className={cn("neo-card bg-white p-8", className)}>
+        <div className={cn("neo-card bg-card p-8", className)}>
           {children}
         </div>
       </div>
