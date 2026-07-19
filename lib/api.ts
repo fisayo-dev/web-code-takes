@@ -53,3 +53,7 @@ export function getMe() {
 export function checkUsername(username: string) {
   return unwrap(api.get<ApiResponse>(`/users/check-if-username-available/${username}`))
 }
+
+export function getUserByUsername(username: string) {
+  return unwrap<User>(api.get<ApiResponse<User>>(`/users/${username}`))
+}
