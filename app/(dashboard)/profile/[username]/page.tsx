@@ -1,134 +1,33 @@
-"use client"
+import { redirect } from "next/navigation"
+import { getServerUser, getServerUserByUsername } from "@/lib/server-api"
+import { ProfileView } from "@/components/profile-view"
 
-import { useEffect, useState, useTransition } from "react"
-import { useParams, useRouter } from "next/navigation"
-import { getUserByUsername } from "@/lib/api"
-import { avatarUrl } from "@/lib/utils"
-import { useUser } from "@/hooks/use-user"
-import { Skeleton } from "@/components/ui/skeleton"
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
-import { ArrowLeft } from "@phosphor-icons/react"
-import Link from "next/link"
-import type { User } from "@/lib/types"
+export default async function ProfilePage({
+  params,
+}: {
+  params: Promise<{ username: string }>
+}) {
+  const { username } = await params
 
-export default function ProfilePage() {
-  const params = useParams()
-  const router = useRouter()
-  const username = params.username as string
-  const { user: currentUser } = useUser()
-  const [profile, setProfile] = useState<User | null>(null)
-  const [error, setError] = useState<string | null>(null)
-  const [isPending, startTransition] = useTransition()
-
-  const isOwnProfile = currentUser?.username === username
-
-  useEffect(() => {
-    if (isOwnProfile) {
-      router.replace("/profile/me")
-    }
-  }, [isOwnProfile, router])
-
-  useEffect(() => {
-    if (!username || isOwnProfile) return
-
-    let cancelled = false
-    startTransition(async () => {
-      try {
-        const user = await getUserByUsername(username)
-        if (!cancelled) setProfile(user)
-      } catch {
-        if (!cancelled) setError("User not found")
-      }
-    })
-
-    return () => { cancelled = true }
-  }, [username, startTransition, isOwnProfile])
-
-  if (isPending && !profile) {
-    return (
-      <div className="flex flex-col gap-6">
-        <Skeleton className="h-8 w-48 neo-card-sm" />
-        <div className="neo-card bg-card p-6">
-          <div className="flex items-center gap-4">
-            <Skeleton className="size-20" />
-            <div className="flex flex-col gap-2">
-              <Skeleton className="h-5 w-32" />
-              <Skeleton className="h-3 w-24" />
-            </div>
-          </div>
-        </div>
-      </div>
-    )
+  let currentUser = null
+  try {
+    currentUser = await getServerUser()
+  } catch {
+    // not logged in — just show the profile
   }
 
-  if (error || !profile) {
-    return (
-      <div className="flex flex-col items-center gap-4 py-16">
-        <p className="text-sm text-muted-foreground">{error || "User not found"}</p>
-        <Link href="/feed" className="text-xs font-semibold text-primary hover:underline">
-          Back to feed
-        </Link>
-      </div>
-    )
+  if (currentUser?.username === username) {
+    redirect("/profile/me")
   }
 
-  return (
-    <div className="flex flex-col gap-6">
-      <Link
-        href="/feed"
-        className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors w-fit"
-      >
-        <ArrowLeft className="size-3.5" />
-        Back to feed
-      </Link>
+  let profile = null
+  let error: string | undefined
 
-      <div className="neo-card bg-card p-6">
-        <div className="flex flex-col items-center gap-4 sm:flex-row">
-          <Avatar size="xl">
-            <AvatarImage src={avatarUrl(profile.username, 100)} alt={profile.name} />
-            <AvatarFallback>{profile.name.charAt(0)}</AvatarFallback>
-          </Avatar>
-          <div className="text-center sm:text-left">
-            <h1 className="text-lg font-bold uppercase tracking-tight">{profile.name}</h1>
-            <p className="text-xs text-muted-foreground">@{profile.username}</p>
-            {isOwnProfile && (
-              <p className="mt-1 text-[10px] text-primary font-semibold uppercase tracking-widest">
-                This is you
-              </p>
-            )}
-          </div>
-        </div>
-      </div>
+  try {
+    profile = await getServerUserByUsername(username)
+  } catch {
+    error = "User not found"
+  }
 
-      <div className="neo-card bg-card p-6">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-4">Details</h2>
-        <div className="flex flex-col gap-3 text-sm">
-          <div className="flex items-center justify-between border-b border-border pb-3">
-            <span className="text-muted-foreground text-xs">Username</span>
-            <span className="font-semibold text-xs">@{profile.username}</span>
-          </div>
-          <div className="flex items-center justify-between border-b border-border pb-3">
-            <span className="text-muted-foreground text-xs">Email</span>
-            <span className="font-semibold text-xs">{isOwnProfile ? profile.email : "Hidden"}</span>
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="text-muted-foreground text-xs">Joined</span>
-            <span className="font-semibold text-xs">
-              {new Date(profile.createdAt).toLocaleDateString("en-US", {
-                month: "short",
-                day: "numeric",
-                year: "numeric",
-              })}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <div className="neo-card bg-card p-6">
-        <p className="text-xs text-muted-foreground text-center py-4">
-          Takes will appear here soon.
-        </p>
-      </div>
-    </div>
-  )
+  return <ProfileView profile={profile} isOwnProfile={false} error={error} />
 }

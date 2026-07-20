@@ -2,13 +2,23 @@ import axios from "axios"
 import type { ApiResponse, LoginPayload, OtpPayload, SignupPayload, User } from "./types"
 
 const TOKEN_KEY = "auth_token"
+const TOKEN_COOKIE = "auth_token"
 
 let token: string | null = typeof window !== "undefined" ? localStorage.getItem(TOKEN_KEY) : null
+
+function setTokenCookie(t: string) {
+  document.cookie = `${TOKEN_COOKIE}=${encodeURIComponent(t)}; path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Lax`
+}
+
+function clearTokenCookie() {
+  document.cookie = `${TOKEN_COOKIE}=; path=/; max-age=0`
+}
 
 export function setAuthToken(t: string) {
   token = t
   if (typeof window !== "undefined") {
     localStorage.setItem(TOKEN_KEY, t)
+    setTokenCookie(t)
   }
 }
 
@@ -16,6 +26,7 @@ export function clearAuthToken() {
   token = null
   if (typeof window !== "undefined") {
     localStorage.removeItem(TOKEN_KEY)
+    clearTokenCookie()
   }
 }
 
