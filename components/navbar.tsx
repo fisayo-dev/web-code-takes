@@ -40,10 +40,12 @@ export function Navbar() {
 
           {isAuthenticated && user ? (
             <>
-              <Button variant="outline" className="text-xs flex items-center gap-2">
-                <PlusIcon className="size-3.5" />
-                Create take
-              </Button>
+              <Link href="/create">
+                <Button variant="outline" className="text-xs flex items-center gap-2">
+                  <PlusIcon className="size-3.5" />
+                  Create take
+                </Button>
+              </Link>
               
               <DropdownMenu>
                 <DropdownMenuTrigger className="outline-none">
