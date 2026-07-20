@@ -2,6 +2,8 @@
 
 import { useUser } from "@/hooks/use-user"
 import { Skeleton } from "@/components/ui/skeleton"
+import { ChatCenteredIcon, NotepadIcon } from "@phosphor-icons/react"
+import { Button } from "@/components/ui/button"
 
 export default function FeedPage() {
   const { user, isLoading } = useUser()
@@ -21,19 +23,14 @@ export default function FeedPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="neo-card bg-card p-6">
-        <h1 className="text-xl font-bold uppercase tracking-tight">
-          Welcome{user ? `, ${user.name}` : ""}!
-        </h1>
-        <p className="mt-2 text-xs text-muted-foreground">
-          This is your feed. Takes will appear here soon.
-        </p>
-      </div>
-
-      <div className="neo-card bg-card p-6">
-        <p className="text-xs text-muted-foreground text-center py-8">
+      <div className="p-6 flex flex-col items-center gap-2">
+        <ChatCenteredIcon className="text-muted-foreground inline-block w-70 h-70" />
+        <p className="text-xs text-muted-foreground text-center">
           No takes yet. Be the first to post one.
         </p>
+        <Button  className="my-4">
+          Post a take
+        </Button>
       </div>
     </div>
   )
