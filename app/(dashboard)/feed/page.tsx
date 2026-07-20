@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { useUser } from "@/hooks/use-user"
 import { Skeleton } from "@/components/ui/skeleton"
-import { ChatCenteredIcon } from "@phosphor-icons/react"
+import { ChatCenteredIcon, GridFourIcon, ListIcon } from "@phosphor-icons/react"
 import { Button } from "@/components/ui/button"
 import { TakeCard } from "@/components/take-card"
 import { getFeedTakes } from "@/lib/api"
@@ -15,6 +15,7 @@ export default function FeedPage() {
   const [takes, setTakes] = useState<Take[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [layout, setLayout] = useState<"grid" | "list">("grid")
 
   useEffect(() => {
     getFeedTakes()
@@ -51,7 +52,27 @@ export default function FeedPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-lg font-bold uppercase tracking-tight">Feed</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-lg font-bold uppercase tracking-tight">Feed</h1>
+        <div className="flex gap-1">
+          <button
+            onClick={() => setLayout("grid")}
+            className={`p-1.5 rounded transition-colors ${
+              layout === "grid" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            <GridFourIcon className="size-4" />
+          </button>
+          <button
+            onClick={() => setLayout("list")}
+            className={`p-1.5 rounded transition-colors ${
+              layout === "list" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            <ListIcon className="size-4" />
+          </button>
+        </div>
+      </div>
 
       {takes.length === 0 ? (
         <div className="p-6 flex flex-col items-center gap-2">
@@ -64,9 +85,9 @@ export default function FeedPage() {
           </Link>
         </div>
       ) : (
-        <div className="flex flex-col gap-4">
+        <div className={layout === "grid" ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" : "flex flex-col gap-4"}>
           {takes.map((take) => (
-            <TakeCard key={take.id} take={take} />
+            <TakeCard key={take.id} take={take} layout={layout} />
           ))}
         </div>
       )}
