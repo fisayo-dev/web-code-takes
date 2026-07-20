@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react"
 import { CheckCircle, XCircle, X } from "@phosphor-icons/react"
 import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
 
 interface AlertModalProps {
   open: boolean
@@ -75,12 +76,12 @@ export function AlertModal({ open, onClose, type, title, description }: AlertMod
             )}
           </div>
 
-          <button
+          <Button
             onClick={handleClose}
-            className="neo-btn mt-2 px-6 py-2 text-xs"
+            className="mt-2 px-6 py-2"
           >
             {type === "success" ? "Continue" : "Try Again"}
-          </button>
+          </Button>
         </div>
       </div>
     </dialog>

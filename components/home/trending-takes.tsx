@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { TrendUp, Fire, ChatCircle, ArrowUp } from "@phosphor-icons/react"
+import { Button } from "@/components/ui/button"
 
 interface Take {
   id: string
@@ -127,28 +128,22 @@ export function TrendingTakes() {
         </div>
 
         <div className="flex items-center justify-center gap-2 mb-8">
-          <button
+          <Button
+            variant={activeTab === "trending" ? "neo" : "neo-secondary"}
             onClick={() => setActiveTab("trending")}
-            className={`flex items-center gap-1.5 px-4 py-2 text-xs font-semibold uppercase tracking-wide transition-colors ${
-              activeTab === "trending"
-                ? "bg-primary text-primary-foreground"
-                : "border border-border text-muted-foreground hover:bg-muted"
-            }`}
+            className="gap-1.5"
           >
             <TrendUp className="size-3.5" />
             Trending
-          </button>
-          <button
+          </Button>
+          <Button
+            variant={activeTab === "popular" ? "neo" : "neo-secondary"}
             onClick={() => setActiveTab("popular")}
-            className={`flex items-center gap-1.5 px-4 py-2 text-xs font-semibold uppercase tracking-wide transition-colors ${
-              activeTab === "popular"
-                ? "bg-primary text-primary-foreground"
-                : "border border-border text-muted-foreground hover:bg-muted"
-            }`}
+            className="gap-1.5"
           >
             <Fire className="size-3.5" />
             Popular
-          </button>
+          </Button>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">

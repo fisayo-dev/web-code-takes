@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react"
 import { checkUsername } from "@/lib/api"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { cn } from "@/lib/utils"
@@ -100,7 +101,7 @@ export function SignupStep1({ data, onChange, onNext }: SignupStep1Props) {
   }
 
   const inputClass = (field: keyof Step1Errors) =>
-    cn("neo-input w-full", errors[field] && "border-accent-red focus:ring-accent-red/30")
+    cn("w-full", errors[field] && "border-accent-red focus:outline-accent-red/30")
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5">
@@ -206,9 +207,9 @@ export function SignupStep1({ data, onChange, onNext }: SignupStep1Props) {
         </div>
       </div>
 
-      <button type="submit" className="neo-btn mt-2 w-full bg-primary py-2.5 text-xs text-primary-foreground">
+      <Button type="submit" className="mt-2 w-full py-2.5">
         Continue
-      </button>
+      </Button>
     </form>
   )
 }

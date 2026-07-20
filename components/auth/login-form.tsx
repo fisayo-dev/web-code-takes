@@ -5,6 +5,7 @@ import Link from "next/link"
 import { login } from "@/lib/api"
 import { AlertModal } from "@/components/alert-modal"
 import { AuthCard } from "@/components/auth/auth-card"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
@@ -67,7 +68,7 @@ export function LoginForm() {
   }
 
   const inputClass = (field: "email" | "password") =>
-    cn("neo-input w-full", errors[field] && "border-accent-red focus:ring-accent-red/30")
+    cn("w-full", errors[field] && "border-accent-red focus:outline-accent-red/30")
 
   return (
     <AuthCard>
@@ -113,13 +114,13 @@ export function LoginForm() {
           {errors.password && <p className="text-[10px] text-accent-red">{errors.password}</p>}
         </div>
 
-        <button
+        <Button
           type="submit"
           disabled={isSubmitting}
-          className="neo-btn mt-1 w-full bg-primary py-2.5 text-xs text-primary-foreground disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none disabled:translate-x-0 disabled:translate-y-0"
+          className="w-full py-2.5"
         >
           {isSubmitting ? "Logging in..." : "Log In"}
-        </button>
+        </Button>
       </form>
 
       <div className="mt-6">

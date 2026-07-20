@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { sendOtp } from "@/lib/api"
+import { Button } from "@/components/ui/button"
 import { OtpInput } from "@/components/ui/otp-input"
 
 interface SignupStep2Props {
@@ -61,14 +62,15 @@ export function SignupStep2({ email, otp, onOtpChange, onVerified, onError }: Si
         <OtpInput value={otp} onChange={onOtpChange} disabled={isVerifying} />
       </div>
 
-      <button
+      <Button
         type="button"
+        variant="neo-green"
         onClick={handleVerify}
         disabled={otp.length !== 6 || isVerifying}
-        className="neo-btn-green w-full py-2.5 text-xs disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none disabled:translate-x-0 disabled:translate-y-0"
+        className="w-full py-2.5"
       >
         {isVerifying ? "Verifying..." : "Verify Code"}
-      </button>
+      </Button>
 
       <p className="text-center text-xs text-muted-foreground">
         Didn&apos;t receive it?{" "}
