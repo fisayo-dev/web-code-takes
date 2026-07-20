@@ -12,14 +12,10 @@ export function proxy(request: NextRequest) {
     return NextResponse.next()
   }
 
-  if (pathname.startsWith("/feed") || pathname.startsWith("/settings")) {
-    if (!hasSession) {
-      return NextResponse.redirect(new URL("/login", request.url))
-    }
-    return NextResponse.next()
-  }
-
   if (pathname === "/") {
+    if (hasSession) {
+      return NextResponse.redirect(new URL("/feed", request.url))
+    }
     return NextResponse.next()
   }
 
