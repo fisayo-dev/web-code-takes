@@ -67,8 +67,8 @@ export default function MyProfilePage() {
 
       <div className="neo-card bg-card p-6">
         <div className="flex flex-col items-center gap-4 sm:flex-row">
-          <Avatar size="lg">
-            <AvatarImage src={avatarUrl(profile.username, 120)} alt={profile.name} />
+          <Avatar size="xl">
+            <AvatarImage src={avatarUrl(profile.username, 100)} alt={profile.name} />
             <AvatarFallback>{profile.name.charAt(0)}</AvatarFallback>
           </Avatar>
           <div className="text-center sm:text-left">
