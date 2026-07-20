@@ -53,7 +53,7 @@ export function LoginForm() {
         description: "Redirecting you now...",
       })
       setTimeout(() => {
-        window.location.href = "/"
+        window.location.href = "/feed"
       }, 1500)
     } catch (err) {
       setAlert({
