@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Code, SignOut, User as UserIcon } from "@phosphor-icons/react"
+import { Code, GearIcon, SignOut, User as UserIcon } from "@phosphor-icons/react"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 
 export function Navbar() {
@@ -67,13 +67,14 @@ export function Navbar() {
                 </DropdownMenuItem>
                 <DropdownMenuItem className="rounded-none outline-none">
                   <Link href="/settings" className="flex items-center gap-2 px-2 py-1.5 text-xs font-semibold w-full hover:text-primary transition-colors">
+                    <GearIcon className="size-3.5" />
                     Settings
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator className="my-1 h-px bg-border" />
                 <DropdownMenuItem
                   onClick={handleLogout}
-                  className="flex cursor-pointer items-center gap-2 rounded-none px-2 py-1.5 text-xs text-accent-red hover:bg-muted outline-none"
+                  className="flex cursor-pointer items-center gap-2 rounded-none px-4 py-3 text-xs text-accent-red hover:bg-muted outline-none"
                 >
                   <SignOut className="size-3.5" />
                   Log out
