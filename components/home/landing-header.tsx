@@ -11,7 +11,7 @@ export function LandingHeader() {
 
   return (
     <header className="sticky top-0 z-50 bg-background shadow-[0_2px_10px_oklch(0_0_0_/_25%)]">
-      <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
+      <div className="mx-auto flex h-14 max-w-5xl items-center justify-between ">
         <Link href="/" className="flex items-center gap-2">
           <Code className="size-5 text-primary" weight="bold" />
           <span className="text-sm font-bold uppercase tracking-tight">code-takes</span>

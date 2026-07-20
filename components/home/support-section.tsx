@@ -1,3 +1,4 @@
+"use client"
 import { Heart, Coffee } from "@phosphor-icons/react"
 
 export function SupportSection() {
