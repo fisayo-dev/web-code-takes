@@ -68,7 +68,7 @@ export default function MyProfilePage() {
 
       <div className="flex flex-col md:grid grid-cols-12 gap-10">
         <div className="neo-card bg-card p-6 col-span-3">
-          <div className="grid md:flex md:flex-col items-center gap-4 sm:flex-row">
+          <div className="grid md:flex md:flex-col items-center gap-3 sm:flex-row">
             <Avatar size="xl" className="mx-auto md:mx-0 flex items-center">
               <AvatarImage src={avatarUrl(profile.username, 100)} alt={profile.name} />
               <AvatarFallback>{profile.name.charAt(0)}</AvatarFallback>
