@@ -56,7 +56,7 @@ export function AlertModal({ open, onClose, type, title, description }: AlertMod
       >
         <button
           onClick={handleClose}
-          className="absolute top-3 right-3 p-1 hover:bg-muted rounded"
+          className="absolute top-3 right-3 p-1 hover:bg-muted rounded text-muted-foreground hover:text-white"
           aria-label="Close"
         >
           <X className="size-4" />
@@ -70,7 +70,7 @@ export function AlertModal({ open, onClose, type, title, description }: AlertMod
           )}
 
           <div className="space-y-1">
-            <h2 className="text-sm font-bold uppercase tracking-wide">{title}</h2>
+            <h2 className="text-sm font-bold uppercase tracking-wide text-white">{title}</h2>
             {description && (
               <p className="text-xs text-muted-foreground">{description}</p>
             )}
