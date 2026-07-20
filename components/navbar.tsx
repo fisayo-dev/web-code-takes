@@ -29,7 +29,7 @@ export function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-50 bg-background shadow-[0_2px_10px_oklch(0_0_0_/_25%)]">
+    <header className="sticky top-0 z-50 bg-background border-b border-muted">
       <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
           <Code className="size-5 text-primary" weight="bold" />
