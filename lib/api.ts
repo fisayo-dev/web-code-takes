@@ -1,5 +1,5 @@
 import axios from "axios"
-import type { ApiResponse, LoginPayload, OtpPayload, SignupPayload, User } from "./types"
+import type { ApiResponse, Comment, LoginPayload, OtpPayload, SignupPayload, Take, User, VoteResult } from "./types"
 
 const TOKEN_KEY = "auth_token"
 const TOKEN_COOKIE = "auth_token"
@@ -104,4 +104,44 @@ export function checkUsername(username: string) {
 
 export function getUserByUsername(username: string) {
   return unwrap<User>(api.get<ApiResponse<User>>(`/users/${username}`))
+}
+
+export function getFeedTakes() {
+  return unwrap<Take[]>(api.get<ApiResponse<Take[]>>(`/takes`))
+}
+
+export function getTakeById(id: string) {
+  return unwrap<Take>(api.get<ApiResponse<Take>>(`/takes/${id}`))
+}
+
+export function getTakesByUsername(username: string) {
+  return unwrap<Take[]>(api.get<ApiResponse<Take[]>>(`/takes/user/${username}`))
+}
+
+export function createTake(data: { text: string; hashtags: string[] }) {
+  return unwrap<Take>(api.post<ApiResponse<Take>>("/takes", data))
+}
+
+export function updateTake(id: string, data: { text?: string; hashtags?: string[] }) {
+  return unwrap<Take>(api.patch<ApiResponse<Take>>(`/takes/${id}`, data))
+}
+
+export function deleteTake(id: string) {
+  return unwrap(api.delete<ApiResponse>(`/takes/${id}`))
+}
+
+export function toggleVote(takeId: string) {
+  return unwrap<VoteResult>(api.post<ApiResponse<VoteResult>>(`/takes/${takeId}/vote`))
+}
+
+export function getComments(takeId: string) {
+  return unwrap<Comment[]>(api.get<ApiResponse<Comment[]>>(`/takes/${takeId}/comments`))
+}
+
+export function createComment(takeId: string, text: string) {
+  return unwrap<Comment>(api.post<ApiResponse<Comment>>(`/takes/${takeId}/comments`, { text }))
+}
+
+export function deleteComment(commentId: string) {
+  return unwrap(api.delete<ApiResponse>(`/comments/${commentId}`))
 }

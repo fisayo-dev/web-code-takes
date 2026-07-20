@@ -1,5 +1,5 @@
 import { cookies } from "next/headers"
-import type { ApiResponse, User } from "./types"
+import type { ApiResponse, Take, User } from "./types"
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL!
 
@@ -39,4 +39,8 @@ export async function getServerUser(): Promise<User> {
 
 export async function getServerUserByUsername(username: string): Promise<User> {
   return serverFetch<User>(`/users/${username}`)
+}
+
+export async function getServerTakesByUsername(username: string): Promise<Take[]> {
+  return serverFetch<Take[]>(`/takes/user/${username}`)
 }

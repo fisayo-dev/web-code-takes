@@ -2,17 +2,19 @@
 
 import { avatarUrl } from "@/lib/utils"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
-import { ArrowLeft } from "@phosphor-icons/react"
+import { ArrowLeft, NotepadIcon } from "@phosphor-icons/react"
 import Link from "next/link"
-import type { User } from "@/lib/types"
+import { TakeCard } from "@/components/take-card"
+import type { Take, User } from "@/lib/types"
 
 interface ProfileViewProps {
   profile: User | null
+  takes: Take[]
   isOwnProfile: boolean
   error?: string
 }
 
-export function ProfileView({ profile, isOwnProfile, error }: ProfileViewProps) {
+export function ProfileView({ profile, takes, isOwnProfile, error }: ProfileViewProps) {
   if (error || !profile) {
     return (
       <div className="flex flex-col items-center gap-4 py-16">
@@ -117,10 +119,30 @@ export function ProfileView({ profile, isOwnProfile, error }: ProfileViewProps) 
         </>
       )}
 
-      <div className="neo-card bg-card p-6">
-        <p className="text-xs text-muted-foreground text-center py-4">
-          Takes will appear here soon.
-        </p>
+      <div className="flex flex-col gap-4">
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+          Takes ({takes.length})
+        </h2>
+
+        {takes.length === 0 ? (
+          <div className="neo-card bg-card p-6">
+            <div className="flex flex-col items-center gap-2 py-4">
+              <NotepadIcon className="text-muted-foreground size-8" />
+              <p className="text-xs text-muted-foreground text-center">
+                {isOwnProfile ? "You haven't posted any takes yet." : "No takes yet."}
+              </p>
+              {isOwnProfile && (
+                <Link href="/create" className="text-xs font-semibold text-primary hover:underline mt-2">
+                  Post your first take
+                </Link>
+              )}
+            </div>
+          </div>
+        ) : (
+          takes.map((take) => (
+            <TakeCard key={take.id} take={take} />
+          ))
+        )}
       </div>
     </div>
   )
