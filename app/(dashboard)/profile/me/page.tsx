@@ -1,48 +1,31 @@
 "use client"
 
 import { useEffect, useState, useTransition } from "react"
-import { useParams, useRouter } from "next/navigation"
-import { getUserByUsername } from "@/lib/api"
+import { getMe } from "@/lib/api"
 import { avatarUrl } from "@/lib/utils"
-import { useUser } from "@/hooks/use-user"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { ArrowLeft } from "@phosphor-icons/react"
 import Link from "next/link"
 import type { User } from "@/lib/types"
 
-export default function ProfilePage() {
-  const params = useParams()
-  const router = useRouter()
-  const username = params.username as string
-  const { user: currentUser } = useUser()
+export default function MyProfilePage() {
   const [profile, setProfile] = useState<User | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
 
-  const isOwnProfile = currentUser?.username === username
-
   useEffect(() => {
-    if (isOwnProfile) {
-      router.replace("/profile/me")
-    }
-  }, [isOwnProfile, router])
-
-  useEffect(() => {
-    if (!username || isOwnProfile) return
-
     let cancelled = false
     startTransition(async () => {
       try {
-        const user = await getUserByUsername(username)
+        const user = await getMe()
         if (!cancelled) setProfile(user)
       } catch {
-        if (!cancelled) setError("User not found")
+        if (!cancelled) setError("Could not load profile")
       }
     })
-
     return () => { cancelled = true }
-  }, [username, startTransition, isOwnProfile])
+  }, [])
 
   if (isPending && !profile) {
     return (
@@ -64,7 +47,7 @@ export default function ProfilePage() {
   if (error || !profile) {
     return (
       <div className="flex flex-col items-center gap-4 py-16">
-        <p className="text-sm text-muted-foreground">{error || "User not found"}</p>
+        <p className="text-sm text-muted-foreground">{error || "Could not load profile"}</p>
         <Link href="/feed" className="text-xs font-semibold text-primary hover:underline">
           Back to feed
         </Link>
@@ -91,11 +74,9 @@ export default function ProfilePage() {
           <div className="text-center sm:text-left">
             <h1 className="text-lg font-bold uppercase tracking-tight">{profile.name}</h1>
             <p className="text-xs text-muted-foreground">@{profile.username}</p>
-            {isOwnProfile && (
-              <p className="mt-1 text-[10px] text-primary font-semibold uppercase tracking-widest">
-                This is you
-              </p>
-            )}
+            <p className="mt-1 text-[10px] text-primary font-semibold uppercase tracking-widest">
+              This is you
+            </p>
           </div>
         </div>
       </div>
@@ -109,7 +90,7 @@ export default function ProfilePage() {
           </div>
           <div className="flex items-center justify-between border-b border-border pb-3">
             <span className="text-muted-foreground text-xs">Email</span>
-            <span className="font-semibold text-xs">{isOwnProfile ? profile.email : "Hidden"}</span>
+            <span className="font-semibold text-xs">{profile.email}</span>
           </div>
           <div className="flex items-center justify-between">
             <span className="text-muted-foreground text-xs">Joined</span>

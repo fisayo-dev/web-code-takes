@@ -1,10 +1,10 @@
 "use client"
 
 import Link from "next/link"
-import Image from "next/image"
 import { Code } from "@phosphor-icons/react"
 import { useUser } from "@/hooks/use-user"
 import { avatarUrl } from "@/lib/utils"
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 
 export function LandingHeader() {
   const { user, isAuthenticated } = useUser()
@@ -20,13 +20,10 @@ export function LandingHeader() {
         <nav className="flex items-center gap-3">
           {isAuthenticated && user ? (
             <Link href="/feed" className="flex items-center gap-2">
-              <Image
-                src={avatarUrl(user.username)}
-                alt={user.name}
-                width={32}
-                height={32}
-                className="border border-border hover:opacity-80 transition-opacity"
-              />
+              <Avatar>
+                <AvatarImage src={avatarUrl(user.username)} alt={user.name} />
+                <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+              </Avatar>
             </Link>
           ) : (
             <>

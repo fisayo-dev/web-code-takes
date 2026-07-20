@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Code, SignOut, User as UserIcon } from "@phosphor-icons/react"
-import Image from "next/image"
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 
 export function Navbar() {
   const { user, isAuthenticated, reset } = useUser()
@@ -42,23 +42,17 @@ export function Navbar() {
           {isAuthenticated && user ? (
             <DropdownMenu>
               <DropdownMenuTrigger className="outline-none">
-                <Image
-                  src={avatarUrl(user.username)}
-                  alt={user.name}
-                  width={32}
-                  height={32}
-                  className="border border-border hover:opacity-80 transition-opacity"
-                />
+                <Avatar>
+                  <AvatarImage src={avatarUrl(user.username)} alt={user.name} />
+                  <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+                </Avatar>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="min-w-48 rounded-none border border-border bg-card p-1 shadow-[4px_4px_0px_oklch(0_0_0_/_20%)]">
                 <div className="flex items-center gap-3 px-2 py-2">
-                  <Image
-                    src={avatarUrl(user.username)}
-                    alt={user.name}
-                    width={36}
-                    height={36}
-                    className="border border-border"
-                  />
+                  <Avatar size="lg">
+                    <AvatarImage src={avatarUrl(user.username)} alt={user.name} />
+                    <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+                  </Avatar>
                   <div>
                     <p className="text-xs font-semibold">{user.name}</p>
                     <p className="text-[10px] text-muted-foreground">@{user.username}</p>
@@ -66,7 +60,7 @@ export function Navbar() {
                 </div>
                 <DropdownMenuSeparator className="my-1 h-px bg-border" />
                 <DropdownMenuItem className="rounded-none outline-none">
-                  <Link href={`/profile/${user.username}`} className="flex items-center gap-2 px-2 py-1.5 text-xs font-semibold w-full hover:text-primary transition-colors">
+                  <Link href="/profile/me" className="flex items-center gap-2 px-2 py-1.5 text-xs font-semibold w-full hover:text-primary transition-colors">
                     <UserIcon className="size-3.5" />
                     Profile
                   </Link>
