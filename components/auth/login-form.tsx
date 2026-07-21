@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import { useSearchParams } from "next/navigation"
 import { login } from "@/lib/api"
 import { AlertModal } from "@/components/alert-modal"
 import { AuthCard } from "@/components/auth/auth-card"
@@ -12,6 +13,9 @@ import { Separator } from "@/components/ui/separator"
 import { cn } from "@/lib/utils"
 
 export function LoginForm() {
+  const searchParams = useSearchParams()
+  const redirectTo = searchParams.get("redirect")
+
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({})
@@ -53,7 +57,7 @@ export function LoginForm() {
         description: "Redirecting you now...",
       })
       setTimeout(() => {
-        window.location.href = "/feed"
+        window.location.href = redirectTo || "/feed"
       }, 1500)
     } catch (err) {
       setAlert({
@@ -127,7 +131,7 @@ export function LoginForm() {
         <Separator className="my-4" />
         <p className="text-center text-xs text-muted-foreground">
           Don&apos;t have an account?{" "}
-          <Link href="/signup" className="font-semibold text-foreground underline underline-offset-2 hover:no-underline">
+          <Link href={`/signup${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ""}`} className="font-semibold text-foreground underline underline-offset-2 hover:no-underline">
             Sign up
           </Link>
         </p>
