@@ -7,8 +7,6 @@ async function serverFetch<T>(path: string): Promise<T> {
   const cookieStore = await cookies()
   const token = cookieStore.get("session")?.value
 
-  console.log("[serverFetch]", path, "token present:", !!token)
-
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
   }
@@ -17,11 +15,9 @@ async function serverFetch<T>(path: string): Promise<T> {
   }
 
   const res = await fetch(`${API_URL}${path}`, { headers })
-  console.log("[serverFetch]", path, "status:", res.status)
 
   if (!res.ok) {
     const body = await res.text()
-    console.log("[serverFetch]", path, "error body:", body)
     throw new Error(`API error ${res.status}: ${body}`)
   }
 
