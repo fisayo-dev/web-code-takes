@@ -10,6 +10,7 @@ import { getFeedTakes } from "@/lib/api"
 import type { Take } from "@/lib/types"
 import Link from "next/link"
 import { FEED_PER_PAGE } from "@/constants"
+import { BookOpenIcon, HouseSimpleIcon } from "@phosphor-icons/react/dist/ssr"
 
 export default function FeedPage() {
   const { isLoading: isUserLoading } = useUser()
@@ -97,7 +98,10 @@ export default function FeedPage() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-lg font-bold uppercase tracking-tight">Feed</h1>
+        <h1 className="flex items-center space-x-2 text-lg font-bold uppercase tracking-tight">
+          <BookOpenIcon className="size-6" />
+          <span>Feed</span>
+        </h1>
         <div className="flex gap-1">
           <button
             onClick={() => setLayout("grid")}
