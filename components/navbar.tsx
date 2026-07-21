@@ -74,12 +74,6 @@ export function Navbar() {
                       Profile
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="rounded outline-none">
-                    <Link href="/settings" className="flex items-center gap-2 px-2 py-1.5 text-xs font-semibold w-full hover:text-primary transition-colors">
-                      <GearIcon className="size-3.5" />
-                      Settings
-                    </Link>
-                  </DropdownMenuItem>
                   <DropdownMenuSeparator className="my-1 h-px bg-border" />
                   <DropdownMenuItem
                     onClick={handleLogout}
