@@ -1,20 +1,61 @@
 "use client"
 
+import { useEffect, useRef, useState, useCallback } from "react"
 import { avatarUrl } from "@/lib/utils"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { ArrowLeft, NotepadIcon } from "@phosphor-icons/react"
 import Link from "next/link"
 import { TakeCard } from "@/components/take-card"
+import { getTakesByUsername } from "@/lib/api"
 import type { Take, User } from "@/lib/types"
+import { TAKES_PER_PAGE } from "@/constants"
 
 interface ProfileViewProps {
   profile: User | null
   takes: Take[]
+  totalTakes: number
   isOwnProfile: boolean
   error?: string
 }
 
-export function ProfileView({ profile, takes, isOwnProfile, error }: ProfileViewProps) {
+export function ProfileView({ profile, takes, totalTakes, isOwnProfile, error }: ProfileViewProps) {
+  const [allTakes, setAllTakes] = useState<Take[]>(takes)
+  const [page, setPage] = useState(1)
+  const [hasMore, setHasMore] = useState(takes.length < totalTakes)
+  const [isLoadingMore, setIsLoadingMore] = useState(false)
+  const sentinelRef = useRef<HTMLDivElement>(null)
+
+  const fetchMore = useCallback(async () => {
+    if (!profile || isLoadingMore || !hasMore) return
+    setIsLoadingMore(true)
+    try {
+      const result = await getTakesByUsername(profile.username, page, TAKES_PER_PAGE)
+      setAllTakes((prev) => [...prev, ...result.items])
+      setHasMore((page + 1) * TAKES_PER_PAGE < result.total)
+      setPage((p) => p + 1)
+    } catch {
+    } finally {
+      setIsLoadingMore(false)
+    }
+  }, [profile, page, isLoadingMore, hasMore])
+
+  useEffect(() => {
+    const sentinel = sentinelRef.current
+    if (!sentinel) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !isLoadingMore) {
+          fetchMore()
+        }
+      },
+      { threshold: 0.1 }
+    )
+
+    observer.observe(sentinel)
+    return () => observer.disconnect()
+  }, [hasMore, isLoadingMore, fetchMore])
+
   if (error || !profile) {
     return (
       <div className="flex flex-col items-center gap-4 py-16">
@@ -121,10 +162,10 @@ export function ProfileView({ profile, takes, isOwnProfile, error }: ProfileView
 
       <div className="flex flex-col gap-4">
         <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-          Takes ({takes.length})
+          Takes ({totalTakes})
         </h2>
 
-        {takes.length === 0 ? (
+        {allTakes.length === 0 ? (
           <div className="neo-card bg-card p-6">
             <div className="flex flex-col items-center gap-2 py-4">
               <NotepadIcon className="text-muted-foreground size-8" />
@@ -139,9 +180,31 @@ export function ProfileView({ profile, takes, isOwnProfile, error }: ProfileView
             </div>
           </div>
         ) : (
-          takes.map((take) => (
-            <TakeCard key={take.id} take={take} />
-          ))
+          <>
+            {allTakes.map((take) => (
+              <TakeCard key={take.id} take={take} />
+            ))}
+
+            {isLoadingMore && (
+              <div className="flex flex-col gap-4">
+                {Array.from({ length: 2 }).map((_, i) => (
+                  <div key={i} className="neo-card bg-card p-6 animate-pulse">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="size-8 rounded-full bg-muted" />
+                      <div className="flex flex-col gap-1">
+                        <div className="h-2.5 w-20 bg-muted rounded" />
+                        <div className="h-2 w-14 bg-muted rounded" />
+                      </div>
+                    </div>
+                    <div className="h-3 w-full bg-muted rounded mb-2" />
+                    <div className="h-3 w-3/4 bg-muted rounded" />
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {hasMore && <div ref={sentinelRef} className="h-4" />}
+          </>
         )}
       </div>
     </div>

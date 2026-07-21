@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState, useCallback } from "react"
 import { useUser } from "@/hooks/use-user"
 import { Skeleton } from "@/components/ui/skeleton"
 import { ChatCenteredIcon, GridFourIcon, ListIcon } from "@phosphor-icons/react"
@@ -9,27 +9,65 @@ import { TakeCard } from "@/components/take-card"
 import { getFeedTakes } from "@/lib/api"
 import type { Take } from "@/lib/types"
 import Link from "next/link"
+import { FEED_PER_PAGE } from "@/constants"
 
 export default function FeedPage() {
   const { isLoading: isUserLoading } = useUser()
   const [takes, setTakes] = useState<Take[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [page, setPage] = useState(0)
+  const [hasMore, setHasMore] = useState(true)
+  const [isLoadingInitial, setIsLoadingInitial] = useState(true)
+  const [isLoadingMore, setIsLoadingMore] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [layout, setLayout] = useState<"grid" | "list">("grid")
+  const sentinelRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    getFeedTakes()
-      .then((data) => {
-        setTakes(data)
-        setIsLoading(false)
+    getFeedTakes(0, FEED_PER_PAGE)
+      .then((result) => {
+        setTakes(result.items)
+        setHasMore(result.items.length < result.total)
+        setPage(1)
+        setIsLoadingInitial(false)
       })
       .catch(() => {
         setError("Failed to load takes")
-        setIsLoading(false)
+        setIsLoadingInitial(false)
       })
   }, [])
 
-  if (isUserLoading || isLoading) {
+  const fetchMore = useCallback(async () => {
+    if (isLoadingMore || !hasMore) return
+    setIsLoadingMore(true)
+    try {
+      const result = await getFeedTakes(page, FEED_PER_PAGE)
+      setTakes((prev) => [...prev, ...result.items])
+      setHasMore((page + 1) * FEED_PER_PAGE < result.total)
+      setPage((p) => p + 1)
+    } catch {
+    } finally {
+      setIsLoadingMore(false)
+    }
+  }, [page, isLoadingMore, hasMore])
+
+  useEffect(() => {
+    const sentinel = sentinelRef.current
+    if (!sentinel) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !isLoadingMore) {
+          fetchMore()
+        }
+      },
+      { threshold: 0.1 }
+    )
+
+    observer.observe(sentinel)
+    return () => observer.disconnect()
+  }, [hasMore, isLoadingMore, fetchMore])
+
+  if (isUserLoading || isLoadingInitial) {
     return (
       <div className="flex flex-col gap-6">
         <Skeleton className="h-8 w-64 neo-card-sm" />
@@ -85,11 +123,23 @@ export default function FeedPage() {
           </Link>
         </div>
       ) : (
-        <div className={layout === "grid" ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" : "flex flex-col gap-4"}>
-          {takes.map((take) => (
-            <TakeCard key={take.id} take={take} layout={layout} />
-          ))}
-        </div>
+        <>
+          <div className={layout === "grid" ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" : "flex flex-col gap-4"}>
+            {takes.map((take) => (
+              <TakeCard key={take.id} take={take} layout={layout} />
+            ))}
+          </div>
+
+          {isLoadingMore && (
+            <div className={layout === "grid" ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" : "flex flex-col gap-4"}>
+              {Array.from({ length: 3 }).map((_, i) => (
+                <Skeleton key={i} className="h-40 w-full neo-card-sm" />
+              ))}
+            </div>
+          )}
+
+          {hasMore && <div ref={sentinelRef} className="h-4" />}
+        </>
       )}
     </div>
   )

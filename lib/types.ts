@@ -41,6 +41,11 @@ export interface VoteResult {
   votesCount: number
 }
 
+export interface PaginatedData<T> {
+  items: T[]
+  total: number
+}
+
 export interface ApiResponse<T = void> {
   success: boolean
   message: string

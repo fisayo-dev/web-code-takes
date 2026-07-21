@@ -1,5 +1,5 @@
 import axios from "axios"
-import type { ApiResponse, Comment, LoginPayload, OtpPayload, SignupPayload, Take, User, VoteResult } from "./types"
+import type { ApiResponse, Comment, LoginPayload, OtpPayload, PaginatedData, SignupPayload, Take, User, VoteResult } from "./types"
 
 const TOKEN_KEY = "auth_token"
 const TOKEN_COOKIE = "auth_token"
@@ -106,16 +106,18 @@ export function getUserByUsername(username: string) {
   return unwrap<User>(api.get<ApiResponse<User>>(`/users/${username}`))
 }
 
-export function getFeedTakes() {
-  return unwrap<Take[]>(api.get<ApiResponse<Take[]>>(`/takes`))
+export function getFeedTakes(page: number = 0, limit: number = 10) {
+  const offset = page * limit
+  return unwrap<PaginatedData<Take>>(api.get<ApiResponse<PaginatedData<Take>>>(`/takes?limit=${limit}&offset=${offset}`))
 }
 
 export function getTakeById(id: string) {
   return unwrap<Take>(api.get<ApiResponse<Take>>(`/takes/${id}`))
 }
 
-export function getTakesByUsername(username: string) {
-  return unwrap<Take[]>(api.get<ApiResponse<Take[]>>(`/takes/user/${username}`))
+export function getTakesByUsername(username: string, page: number = 0, limit: number = 10) {
+  const offset = page * limit
+  return unwrap<PaginatedData<Take>>(api.get<ApiResponse<PaginatedData<Take>>>(`/takes/user/${username}?limit=${limit}&offset=${offset}`))
 }
 
 export function createTake(data: { text: string; hashtags: string[] }) {
@@ -134,8 +136,9 @@ export function toggleVote(takeId: string) {
   return unwrap<VoteResult>(api.post<ApiResponse<VoteResult>>(`/takes/${takeId}/vote`))
 }
 
-export function getComments(takeId: string) {
-  return unwrap<Comment[]>(api.get<ApiResponse<Comment[]>>(`/takes/${takeId}/comments`))
+export function getComments(takeId: string, page: number = 0, limit: number = 10) {
+  const offset = page * limit
+  return unwrap<PaginatedData<Comment>>(api.get<ApiResponse<PaginatedData<Comment>>>(`/takes/${takeId}/comments?limit=${limit}&offset=${offset}`))
 }
 
 export function createComment(takeId: string, text: string) {

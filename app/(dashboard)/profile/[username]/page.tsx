@@ -4,19 +4,13 @@ import { ProfileView } from "@/components/profile-view"
 import { fetchServerTakesByUsername } from "@/lib/server-takes"
 import type { Take } from "@/lib/types"
 
-export default async function ProfilePage({
-  params,
-}: {
-  params: Promise<{ username: string }>
-}) {
+export default async function ProfilePage({ params }: { params: Promise<{ username: string }> }) {
   const { username } = await params
 
   let currentUser = null
   try {
     currentUser = await getServerUser()
-  } catch {
-    // not logged in
-  }
+  } catch {}
 
   if (currentUser?.username === username) {
     redirect("/profile/me")
@@ -24,16 +18,19 @@ export default async function ProfilePage({
 
   let profile = null
   let takes: Take[] = []
+  let totalTakes = 0
   let error: string | undefined
 
   try {
     profile = await getServerUserByUsername(username)
     if (profile) {
-      takes = await fetchServerTakesByUsername(username)
+      const result = await fetchServerTakesByUsername(username)
+      takes = result.items
+      totalTakes = result.total
     }
   } catch {
     error = "User not found"
   }
 
-  return <ProfileView profile={profile} takes={takes} isOwnProfile={false} error={error} />
+  return <ProfileView profile={profile} takes={takes} totalTakes={totalTakes} isOwnProfile={false} error={error} />
 }

@@ -11,6 +11,8 @@ import { Input } from "@/components/ui/input"
 import { ArrowUp, ChatCircle, ArrowLeft, Pencil, Trash } from "@phosphor-icons/react"
 import Link from "next/link"
 import type { Take, Comment as TakeComment } from "@/lib/types"
+import { COMMENTS_PER_PAGE } from "@/constants"
+
 
 export function TakeDetailView({ initialTake }: { initialTake: Take }) {
   const router = useRouter()
@@ -18,6 +20,9 @@ export function TakeDetailView({ initialTake }: { initialTake: Take }) {
 
   const [take, setTake] = useState<Take>(initialTake)
   const [comments, setComments] = useState<TakeComment[]>([])
+  const [totalComments, setTotalComments] = useState(0)
+  const [commentPage, setCommentPage] = useState(0)
+  const [isLoadingComments, setIsLoadingComments] = useState(true)
 
   const [isEditing, setIsEditing] = useState(false)
   const [editText, setEditText] = useState("")
@@ -28,8 +33,18 @@ export function TakeDetailView({ initialTake }: { initialTake: Take }) {
   const [isSubmittingComment, setIsSubmittingComment] = useState(false)
 
   useEffect(() => {
-    getComments(take.id).then(setComments).catch(() => {})
-  }, [take.id])
+    let cancelled = false
+    getComments(take.id, commentPage, COMMENTS_PER_PAGE)
+      .then((result) => {
+        if (!cancelled) {
+          setComments(result.items)
+          setTotalComments(result.total)
+          setIsLoadingComments(false)
+        }
+      })
+      .catch(() => { if (!cancelled) setIsLoadingComments(false) })
+    return () => { cancelled = true }
+  }, [take.id, commentPage])
 
   const handleVote = async () => {
     const previousState = { hasVoted: take.hasVoted, votesCount: take.votesCount }
@@ -75,8 +90,10 @@ export function TakeDetailView({ initialTake }: { initialTake: Take }) {
     setIsSubmittingComment(true)
     try {
       const newComment = await createComment(take.id, commentText.trim())
-      setComments([...comments, newComment])
       setCommentText("")
+      setCommentPage(0)
+      setTotalComments((prev) => prev + 1)
+      setComments((prev) => [newComment, ...prev].slice(0, COMMENTS_PER_PAGE))
     } catch {
       setIsSubmittingComment(false)
     }
@@ -87,10 +104,13 @@ export function TakeDetailView({ initialTake }: { initialTake: Take }) {
     try {
       await deleteComment(commentId)
       setComments(comments.filter((c) => c.id !== commentId))
+      setTotalComments((prev) => prev - 1)
     } catch {}
   }
 
   const isOwner = user?.id === take.authorId
+  const hasPrevComments = commentPage > 0
+  const hasNextComments = (commentPage + 1) * COMMENTS_PER_PAGE < totalComments
 
   return (
     <div className="flex flex-col gap-6">
@@ -196,14 +216,14 @@ export function TakeDetailView({ initialTake }: { initialTake: Take }) {
           </button>
           <span className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wide">
             <ChatCircle className="size-3.5" />
-            {comments.length}
+            {totalComments}
           </span>
         </div>
       </div>
 
       <div className="neo-card bg-card p-6">
         <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-4">
-          Comments ({comments.length})
+          Comments ({totalComments})
         </h2>
 
         {user ? (
@@ -225,7 +245,22 @@ export function TakeDetailView({ initialTake }: { initialTake: Take }) {
           </p>
         )}
 
-        {user && comments.length === 0 ? (
+        {isLoadingComments ? (
+          <div className="flex flex-col gap-4">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="border-b border-border pb-4 last:border-0 last:pb-0 animate-pulse">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="size-8 rounded-full bg-muted" />
+                  <div className="flex flex-col gap-1">
+                    <div className="h-2.5 w-20 bg-muted rounded" />
+                    <div className="h-2 w-14 bg-muted rounded" />
+                  </div>
+                </div>
+                <div className="h-2.5 w-full bg-muted rounded" />
+              </div>
+            ))}
+          </div>
+        ) : user && comments.length === 0 && commentPage === 0 ? (
           <p className="text-xs text-muted-foreground text-center py-4">
             No comments yet. Be the first to comment.
           </p>
@@ -264,6 +299,27 @@ export function TakeDetailView({ initialTake }: { initialTake: Take }) {
                 <p className="text-xs leading-relaxed text-foreground/90">{comment.text}</p>
               </div>
             ))}
+
+            {(hasPrevComments || hasNextComments) && (
+              <div className="flex items-center justify-between pt-2">
+                <Button
+                  variant="neo-secondary"
+                  size="sm"
+                  onClick={() => setCommentPage((p) => p - 1)}
+                  disabled={!hasPrevComments}
+                >
+                  Previous
+                </Button>
+                <Button
+                  variant="neo-secondary"
+                  size="sm"
+                  onClick={() => setCommentPage((p) => p + 1)}
+                  disabled={!hasNextComments}
+                >
+                  Next
+                </Button>
+              </div>
+            )}
           </div>
         )}
       </div>
