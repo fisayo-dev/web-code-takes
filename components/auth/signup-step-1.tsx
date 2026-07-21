@@ -154,7 +154,7 @@ export function SignupStep1({ data, onChange, onNext, loading }: SignupStep1Prop
         {data.username && usernameStatus === "available" && (
           <p className="text-[10px] text-primary">Username is available</p>
         )}
-        {data.username && usernameStatus === "taken" && (
+        {data.username && usernameStatus === "taken" && !errors.username && (
           <p className="text-[10px] text-accent-red">Username is already taken</p>
         )}
         {errors.username && <p className="text-[10px] text-accent-red">{errors.username}</p>}
