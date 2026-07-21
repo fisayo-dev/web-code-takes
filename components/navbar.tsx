@@ -24,7 +24,7 @@ export function Navbar() {
       await logout()
     } finally {
       reset()
-      window.location.href = "/login"
+      window.location.href = "/"
     }
   }
 
