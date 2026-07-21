@@ -109,7 +109,10 @@ export function TakeDetailView({ initialTake }: { initialTake: Take }) {
     } catch {}
   }
 
-  const isOwner = user?.id === take.authorId
+  const [hasMounted, setHasMounted] = useState(false)
+  useEffect(() => { setHasMounted(true) }, [])
+
+  const isOwner = hasMounted && user?.id === take.authorId
   const hasPrevComments = commentPage > 0
   const hasNextComments = (commentPage + 1) * COMMENTS_PER_PAGE < totalComments
 
