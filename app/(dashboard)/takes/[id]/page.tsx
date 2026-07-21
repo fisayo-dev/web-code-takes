@@ -265,7 +265,7 @@ export default function TakeDetailPage() {
           </p>
         )}
 
-        {comments.length === 0 ? (
+        {user && comments.length === 0 ? (
           <p className="text-xs text-muted-foreground text-center py-4">
             No comments yet. Be the first to comment.
           </p>
