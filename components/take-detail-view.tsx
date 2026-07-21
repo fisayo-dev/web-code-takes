@@ -13,11 +13,15 @@ import { ArrowUp, ChatCircle, ArrowLeft, Pencil, Trash } from "@phosphor-icons/r
 import Link from "next/link"
 import type { Take, Comment as TakeComment } from "@/lib/types"
 import { COMMENTS_PER_PAGE } from "@/constants"
+import { useGsapFadeIn } from "@/hooks/use-gsap"
 
 
 export function TakeDetailView({ initialTake }: { initialTake: Take }) {
   const router = useRouter()
   const { user } = useUser()
+
+  const backRef = useGsapFadeIn({ selector: "a", y: 12, duration: 0.3 })
+  const detailCardRef = useGsapFadeIn({ selector: ".neo-card", y: 24, duration: 0.45, delay: 0.1 })
 
   const [take, setTake] = useState<Take>(initialTake)
   const [comments, setComments] = useState<TakeComment[]>([])
@@ -120,15 +124,18 @@ export function TakeDetailView({ initialTake }: { initialTake: Take }) {
 
   return (
     <div className="flex flex-col gap-6">
-      <Link
-        href="/feed"
-        className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors w-fit"
-      >
-        <ArrowLeft className="size-3.5" />
-        Back to feed
-      </Link>
+      <div ref={backRef}>
+        <Link
+          href="/feed"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors w-fit"
+        >
+          <ArrowLeft className="size-3.5" />
+          Back to feed
+        </Link>
+      </div>
 
-      <div className="neo-card bg-card p-6">
+      <div ref={detailCardRef}>
+        <div className="neo-card bg-card p-6 rounded-xl">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <Link href={`/profile/${take.author.username}`}>
@@ -213,7 +220,7 @@ export function TakeDetailView({ initialTake }: { initialTake: Take }) {
         <div className="flex items-center gap-4 text-muted-foreground border-t border-border pt-3">
           <button
             onClick={handleVote}
-            className={`flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wide transition-colors ${
+            className={`rounded-full p-2 hover:bg-secondary cursor-pointer flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wide transition-colors ${
               take.hasVoted ? "text-primary" : "hover:text-primary"
             }`}
           >
@@ -226,8 +233,9 @@ export function TakeDetailView({ initialTake }: { initialTake: Take }) {
           </span>
         </div>
       </div>
+      </div>
 
-      <div className="neo-card bg-card p-6">
+      <div className="neo-card bg-card p-6 rounded-xl">
         <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-4">
           Comments ({totalComments})
         </h2>

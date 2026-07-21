@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "group/button inline-flex shrink-0 items-center justify-center border-2 border-white/15 bg-[length:100%_100%] rounded px-2.5 py-2 text-xs font-semibold uppercase tracking-[0.03em] whitespace-nowrap transition-[box-shadow,transform] outline-none select-none cursor-pointer shadow-[3px_3px_0px_oklch(0_0_0_/_20%)] active:not-aria-[haspopup]:translate-x-[2px] active:not-aria-[haspopup]:translate-y-[2px] active:not-aria-[haspopup]:shadow-[1px_1px_0px_oklch(0_0_0_/_20%)] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none disabled:translate-x-0 disabled:translate-y-0 aria-invalid:border-accent-red aria-invalid:outline-2 aria-invalid:outline-accent-red/30 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "group/button inline-flex shrink-0 items-center justify-center border-2 border-white/15 bg-[length:100%_100%] rounded-lg px-2.5 py-2 text-xs font-semibold uppercase tracking-[0.03em] whitespace-nowrap transition-[box-shadow,transform] outline-none select-none cursor-pointer shadow-[3px_3px_0px_oklch(0_0_0_/_20%)] active:not-aria-[haspopup]:translate-x-[2px] active:not-aria-[haspopup]:translate-y-[2px] active:not-aria-[haspopup]:shadow-[1px_1px_0px_oklch(0_0_0_/_20%)] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none disabled:translate-x-0 disabled:translate-y-0 aria-invalid:border-accent-red aria-invalid:outline-2 aria-invalid:outline-accent-red/30 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {

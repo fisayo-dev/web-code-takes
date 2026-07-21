@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { TrendUp, Fire, ChatCircle, ArrowUp } from "@phosphor-icons/react"
 import { Button } from "@/components/ui/button"
+import { useGsapFadeIn, useGsapPop } from "@/hooks/use-gsap"
 
 interface Take {
   id: string
@@ -85,7 +86,7 @@ const popularTakes: Take[] = [
 
 function TakeCard({ take }: { take: Take }) {
   return (
-    <div className="group border border-border bg-card p-4 shadow-[3px_3px_0px_oklch(0_0_0_/_15%)] transition-all hover:shadow-[4px_4px_0px_oklch(0_0_0_/_20%)] hover:translate-x-[-1px] hover:translate-y-[-1px]">
+    <div className="group border border-border bg-card p-4 shadow-[3px_3px_0px_oklch(0_0_0_/_15%)] rounded-xl transition-all hover:shadow-[4px_4px_0px_oklch(0_0_0_/_20%)] hover:translate-x-[-1px] hover:translate-y-[-1px]">
       <div className="flex items-center gap-2 mb-3">
         <div className="flex size-8 items-center justify-center bg-primary/10 text-primary text-xs font-bold uppercase">
           {take.author.charAt(0)}
@@ -114,10 +115,14 @@ export function TrendingTakes() {
   const [activeTab, setActiveTab] = useState<"trending" | "popular">("trending")
   const takes = activeTab === "trending" ? trendingTakes : popularTakes
 
+  const headerRef = useGsapFadeIn({ selector: ":scope > *", y: 20, duration: 0.45, stagger: 0.08 })
+  const tabsRef = useGsapPop({ selector: ":scope > *", scale: 0.85, duration: 0.35, stagger: 0.06, delay: 0.2 })
+  const gridRef = useGsapFadeIn({ selector: ":scope > *", y: 24, duration: 0.4, stagger: 0.08, delay: 0.3 })
+
   return (
     <section className="px-4 py-16 md:py-24">
       <div className="mx-auto max-w-5xl">
-        <div className="flex flex-col items-center gap-4 mb-10">
+        <div ref={headerRef} className="flex flex-col items-center gap-4 mb-10">
           <h2 className="text-2xl font-bold uppercase tracking-tight md:text-3xl">
             What developers are saying
           </h2>
@@ -127,7 +132,7 @@ export function TrendingTakes() {
           </p>
         </div>
 
-        <div className="flex items-center justify-center gap-2 mb-8">
+        <div ref={tabsRef} className="flex items-center justify-center gap-2 mb-8">
           <Button
             variant={activeTab === "trending" ? "neo" : "neo-secondary"}
             onClick={() => setActiveTab("trending")}
@@ -146,7 +151,7 @@ export function TrendingTakes() {
           </Button>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div ref={gridRef} className="grid gap-4 sm:grid-cols-2">
           {takes.map((take) => (
             <TakeCard key={take.id} take={take} />
           ))}

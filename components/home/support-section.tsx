@@ -1,11 +1,14 @@
 "use client"
 import { Heart, Coffee } from "@phosphor-icons/react"
+import { useGsapFadeIn } from "@/hooks/use-gsap"
 
 export function SupportSection() {
+  const sectionRef = useGsapFadeIn({ selector: ".neo-card, .text-center > *", y: 24, duration: 0.5, delay: 0.1 })
+
   return (
     <section className="px-4 py-16 md:py-24">
-      <div className="mx-auto max-w-2xl text-center">
-        <div className="border border-border bg-card p-8 md:p-12 shadow-[4px_4px_0px_oklch(0_0_0_/_15%)]">
+      <div ref={sectionRef} className="mx-auto max-w-2xl text-center">
+        <div className="border border-border bg-card p-8 md:p-12 shadow-[4px_4px_0px_oklch(0_0_0_/_15%)] rounded-xl">
           <div className="mx-auto mb-4 flex size-12 items-center justify-center bg-primary/10">
             <Heart className="size-6 text-primary" weight="fill" />
           </div>
