@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from "react"
 import { avatarUrl } from "@/lib/utils"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
+import { TakeCardSkeleton } from "@/components/skeletons/take-card-skeleton"
 import { ArrowLeft, NotepadIcon } from "@phosphor-icons/react"
 import Link from "next/link"
 import { TakeCard } from "@/components/take-card"
@@ -188,17 +189,7 @@ export function ProfileView({ profile, takes, totalTakes, isOwnProfile, error }:
             {isLoadingMore && (
               <div className="flex flex-col gap-4">
                 {Array.from({ length: 2 }).map((_, i) => (
-                  <div key={i} className="neo-card bg-card p-6 animate-pulse">
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="size-8 rounded-full bg-muted" />
-                      <div className="flex flex-col gap-1">
-                        <div className="h-2.5 w-20 bg-muted rounded" />
-                        <div className="h-2 w-14 bg-muted rounded" />
-                      </div>
-                    </div>
-                    <div className="h-3 w-full bg-muted rounded mb-2" />
-                    <div className="h-3 w-3/4 bg-muted rounded" />
-                  </div>
+                  <TakeCardSkeleton key={i} />
                 ))}
               </div>
             )}

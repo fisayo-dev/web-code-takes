@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react"
 import { useUser } from "@/hooks/use-user"
-import { Skeleton } from "@/components/ui/skeleton"
+import { TakeCardSkeleton } from "@/components/skeletons/take-card-skeleton"
 import { ChatCenteredIcon, GridFourIcon, ListIcon } from "@phosphor-icons/react"
 import { Button } from "@/components/ui/button"
 import { TakeCard } from "@/components/take-card"
@@ -70,11 +70,17 @@ export default function FeedPage() {
   if (isUserLoading || isLoadingInitial) {
     return (
       <div className="flex flex-col gap-6">
-        <Skeleton className="h-8 w-64 neo-card-sm" />
-        <div className="flex flex-col gap-4">
-          <Skeleton className="h-40 w-full neo-card-sm" />
-          <Skeleton className="h-40 w-full neo-card-sm" />
-          <Skeleton className="h-40 w-full neo-card-sm" />
+        <div className="flex items-center justify-between">
+          <div className="h-8 w-64" />
+          <div className="flex gap-1">
+            <div className="p-1.5" />
+            <div className="p-1.5" />
+          </div>
+        </div>
+        <div className={layout === "grid" ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" : "flex flex-col gap-4"}>
+          {Array.from({ length: 6 }).map((_, i) => (
+            <TakeCardSkeleton key={i} layout={layout} />
+          ))}
         </div>
       </div>
     )
@@ -133,7 +139,7 @@ export default function FeedPage() {
           {isLoadingMore && (
             <div className={layout === "grid" ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" : "flex flex-col gap-4"}>
               {Array.from({ length: 3 }).map((_, i) => (
-                <Skeleton key={i} className="h-40 w-full neo-card-sm" />
+                <TakeCardSkeleton key={i} layout={layout} />
               ))}
             </div>
           )}

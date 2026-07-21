@@ -8,6 +8,7 @@ import { avatarUrl, relativeTime } from "@/lib/utils"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { CommentSkeleton } from "@/components/skeletons/comment-skeleton"
 import { ArrowUp, ChatCircle, ArrowLeft, Pencil, Trash } from "@phosphor-icons/react"
 import Link from "next/link"
 import type { Take, Comment as TakeComment } from "@/lib/types"
@@ -248,16 +249,7 @@ export function TakeDetailView({ initialTake }: { initialTake: Take }) {
         {isLoadingComments ? (
           <div className="flex flex-col gap-4">
             {Array.from({ length: 3 }).map((_, i) => (
-              <div key={i} className="border-b border-border pb-4 last:border-0 last:pb-0 animate-pulse">
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="size-8 rounded-full bg-muted" />
-                  <div className="flex flex-col gap-1">
-                    <div className="h-2.5 w-20 bg-muted rounded" />
-                    <div className="h-2 w-14 bg-muted rounded" />
-                  </div>
-                </div>
-                <div className="h-2.5 w-full bg-muted rounded" />
-              </div>
+              <CommentSkeleton key={i} />
             ))}
           </div>
         ) : user && comments.length === 0 && commentPage === 0 ? (
