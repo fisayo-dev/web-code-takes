@@ -1,15 +1,8 @@
-import { notFound } from "next/navigation"
-import type { Metadata } from "next"
-import { fetchServerTakeById } from "@/lib/server-takes"
-import { TakeDetailView } from "@/components/take-detail-view"
 import { SITE_URL } from "@/constants"
+import { fetchServerTakeById } from "@/lib/server-takes"
+import { Metadata } from "next"
 import type { PageProps } from "@/types"
 
-async function getTake(id: string) {
-  const take = await fetchServerTakeById(id)
-  if (!take) notFound()
-  return take
-}
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params
@@ -48,9 +41,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-export default async function TakeDetailPage({ params }: PageProps) {
-  const { id } = await params
-  const take = await getTake(id)
 
-  return <TakeDetailView initialTake={take} />
+const TakeLayout = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div>
+      {children}
+    </div>
+  )
 }
+
+export default TakeLayout
