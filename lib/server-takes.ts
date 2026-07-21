@@ -1,17 +1,37 @@
+import { cookies } from "next/headers"
 import type { PaginatedData, Take } from "./types"
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL!
 
-export async function fetchServerTakeById(id: string): Promise<Take | null> {
-  const res = await fetch(`${API_URL}/takes/${id}`, {
-    headers: { "Content-Type": "application/json" },
-  })
+async function serverTakesFetch<T>(path: string): Promise<T> {
+  const cookieStore = await cookies()
+  const token = cookieStore.get("session")?.value
 
-  if (!res.ok) return null
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  }
+  if (token) {
+    headers.Authorization = `Bearer ${token}`
+  }
+
+  const res = await fetch(`${API_URL}${path}`, { headers })
+
+  if (!res.ok) {
+    const body = await res.text()
+    throw new Error(`API error ${res.status}: ${body}`)
+  }
 
   const json = await res.json()
-  if (!json.success) return null
-  return json.data || null
+  if (!json.success) throw new Error(json.message)
+  return json.data as T
+}
+
+export async function fetchServerTakeById(id: string): Promise<Take | null> {
+  try {
+    return await serverTakesFetch<Take>(`/takes/${id}`)
+  } catch {
+    return null
+  }
 }
 
 export async function fetchServerTakesByUsername(
@@ -19,13 +39,11 @@ export async function fetchServerTakesByUsername(
   limit: number = 10,
   offset: number = 0
 ): Promise<PaginatedData<Take>> {
-  const res = await fetch(`${API_URL}/takes/user/${username}?limit=${limit}&offset=${offset}`, {
-    headers: { "Content-Type": "application/json" },
-  })
-
-  if (!res.ok) return { items: [], total: 0 }
-
-  const json = await res.json()
-  if (!json.success) return { items: [], total: 0 }
-  return json.data || { items: [], total: 0 }
+  try {
+    return await serverTakesFetch<PaginatedData<Take>>(
+      `/takes/user/${username}?limit=${limit}&offset=${offset}`
+    )
+  } catch {
+    return { items: [], total: 0 }
+  }
 }
