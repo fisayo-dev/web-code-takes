@@ -97,6 +97,8 @@ export function TakeDetailView({ initialTake }: { initialTake: Take }) {
       setComments((prev) => [newComment, ...prev].slice(0, COMMENTS_PER_PAGE))
     } catch {
       setIsSubmittingComment(false)
+    } finally {
+      setIsSubmittingComment(false)
     }
   }
 
