@@ -14,9 +14,11 @@ import { Code, GearIcon, SignOut, User as UserIcon } from "@phosphor-icons/react
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { PlusIcon } from "@phosphor-icons/react/dist/ssr"
 import { Button } from "./ui/button"
+import { useGsapSlideDown } from "@/hooks/use-gsap"
 
 export function Navbar() {
   const { user, isAuthenticated, reset } = useUser()
+  const navRef = useGsapSlideDown({ selector: ":scope > *", y: -16, duration: 0.35, stagger: 0.05 })
 
   const handleLogout = async () => {
     try {
@@ -29,8 +31,8 @@ export function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-50 bg-background border-b border-muted">
-      <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
+    <header className="sticky top-0 z-50 bg-background border-b border-foreground/10 ">
+      <div ref={navRef} className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
           <Code className="size-5 text-primary" weight="bold" />
           <span className="text-sm font-bold uppercase tracking-tight">code-takes</span>

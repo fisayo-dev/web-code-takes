@@ -45,7 +45,7 @@ export function TakeCard({ take, layout = "grid", onVoteChange }: TakeCardProps)
 
   return (
     <Link href={`/takes/${take.id}`}>
-      <div className="neo-card bg-card p-4 transition-all hover:shadow-[5px_5px_0px_oklch(0_0_0/20%)] hover:translate-x-px hover:translate-y-px cursor-pointer flex flex-col h-full">
+      <div className="neo-card bg-card p-4 transition-all hover:shadow-[5px_5px_0px_oklch(0_0_0/20%)] hover:translate-x-px hover:translate-y-px cursor-pointer flex flex-col h-full rounded-xl">
         <div className={`flex-1 ${layout === "list" ? "grid items-start gap-3" : ""}`}>
           <div className={layout === "list" ? "flex items-center gap-2 shrink-0" : "flex items-center gap-2 mb-3"}>
             <Avatar>
@@ -68,7 +68,7 @@ export function TakeCard({ take, layout = "grid", onVoteChange }: TakeCardProps)
                 {take.hashtags.map((tag) => (
                   <span
                     key={tag}
-                    className="inline-flex items-center rounded border border-white/15 bg-secondary px-1.5 py-0.5 text-[10px] font-semibold text-secondary-foreground"
+                    className="inline-flex items-center rounded-lg border border-white/15 bg-secondary px-1.5 py-0.5 text-[10px] font-semibold text-secondary-foreground"
                   >
                     #{tag}
                   </span>

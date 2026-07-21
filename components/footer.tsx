@@ -1,11 +1,13 @@
 "use client"
 import { Code, GithubLogo, TwitterLogo } from "@phosphor-icons/react"
 import Link from "next/link"
+import { useGsapFadeIn } from "@/hooks/use-gsap"
 
 export function Footer() {
+  const footerRef = useGsapFadeIn({ selector: ":scope > *", y: 16, duration: 0.4, stagger: 0.08 })
   return (
-    <footer className="border-t border-border bg-background px-4 py-10">
-      <div className="mx-auto max-w-5xl">
+    <footer className="border-t border-border bg-background px-4 py-10 rounded-t-xl">
+      <div ref={footerRef} className="mx-auto max-w-5xl">
         <div className="flex flex-col items-center gap-8 md:flex-row md:justify-between">
           <div className="flex flex-col items-center gap-2 md:items-start">
             <Link href="/" className="flex items-center gap-2">

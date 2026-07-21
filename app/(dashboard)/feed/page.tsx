@@ -10,7 +10,8 @@ import { getFeedTakes } from "@/lib/api"
 import type { Take } from "@/lib/types"
 import Link from "next/link"
 import { FEED_PER_PAGE } from "@/constants"
-import { BookOpenIcon, HouseSimpleIcon } from "@phosphor-icons/react/dist/ssr"
+import { BookOpenIcon } from "@phosphor-icons/react/dist/ssr"
+import { useGsapFadeIn } from "@/hooks/use-gsap"
 
 export default function FeedPage() {
   const { isLoading: isUserLoading } = useUser()
@@ -22,6 +23,9 @@ export default function FeedPage() {
   const [error, setError] = useState<string | null>(null)
   const [layout, setLayout] = useState<"grid" | "list">("grid")
   const sentinelRef = useRef<HTMLDivElement>(null)
+
+  const headerRef = useGsapFadeIn({ selector: ":scope > *", y: 16, duration: 0.4, stagger: 0.08 })
+  const gridRef = useGsapFadeIn({ selector: ":scope > *", y: 24, duration: 0.4, stagger: 0.06, delay: 0.15 })
 
   useEffect(() => {
     getFeedTakes(0, FEED_PER_PAGE)
@@ -97,7 +101,7 @@ export default function FeedPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex items-center justify-between">
+      <div ref={headerRef} className="flex items-center justify-between">
         <h1 className="flex items-center space-x-2 text-lg font-bold uppercase tracking-tight">
           <BookOpenIcon className="size-6" />
           <span>Feed</span>
@@ -105,7 +109,7 @@ export default function FeedPage() {
         <div className="flex gap-1">
           <button
             onClick={() => setLayout("grid")}
-            className={`p-1.5 rounded transition-colors ${
+            className={`p-1.5 rounded-lg transition-colors ${
               layout === "grid" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
             }`}
           >
@@ -113,7 +117,7 @@ export default function FeedPage() {
           </button>
           <button
             onClick={() => setLayout("list")}
-            className={`p-1.5 rounded transition-colors ${
+            className={`p-1.5 rounded-lg transition-colors ${
               layout === "list" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
             }`}
           >
@@ -134,7 +138,7 @@ export default function FeedPage() {
         </div>
       ) : (
         <>
-          <div className={layout === "grid" ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" : "flex flex-col gap-4"}>
+          <div ref={gridRef} className={layout === "grid" ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" : "flex flex-col gap-4"}>
             {takes.map((take) => (
               <TakeCard key={take.id} take={take} layout={layout} />
             ))}

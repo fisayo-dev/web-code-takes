@@ -5,9 +5,11 @@ import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { createTake } from "@/lib/api"
 import { X } from "@phosphor-icons/react"
+import { useGsapFadeIn } from "@/hooks/use-gsap"
 
 export function CreateTakeForm() {
   const router = useRouter()
+  const formRef = useGsapFadeIn({ selector: ":scope > *", y: 20, duration: 0.4, stagger: 0.08 })
   const [text, setText] = useState("")
   const [hashtags, setHashtags] = useState<string[]>([])
   const [hashtagInput, setHashtagInput] = useState("")
@@ -52,6 +54,7 @@ export function CreateTakeForm() {
   const remainingChars = 500 - text.length
 
   return (
+    <div ref={formRef}>
     <form onSubmit={handleSubmit} className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
         <label className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
@@ -127,5 +130,6 @@ export function CreateTakeForm() {
         </Button>
       </div>
     </form>
+    </div>
   )
 }

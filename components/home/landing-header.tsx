@@ -10,7 +10,7 @@ export function LandingHeader() {
   const { user, isAuthenticated } = useUser()
 
   return (
-    <header className="sticky top-0 z-50 bg-background shadow-[0_2px_10px_oklch(0_0_0_/_25%)]">
+    <header className="sticky top-0 z-50 bg-background  border-b border-foreground/10">
       <div className="mx-auto flex h-14 max-w-5xl items-center justify-between ">
         <Link href="/" className="flex items-center gap-2">
           <Code className="size-5 text-primary" weight="bold" />
@@ -35,7 +35,7 @@ export function LandingHeader() {
               </Link>
               <Link
                 href="/signup"
-                className="bg-primary text-primary-foreground px-4 py-1.5 text-xs font-semibold uppercase tracking-wide hover:opacity-90 transition-opacity"
+                className="bg-primary text-primary-foreground px-4 py-1.5 text-xs font-semibold uppercase tracking-wide hover:opacity-90 transition-opacity rounded-lg"
               >
                 Sign Up
               </Link>
