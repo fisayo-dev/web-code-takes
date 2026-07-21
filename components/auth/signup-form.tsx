@@ -26,6 +26,7 @@ export function SignupForm() {
   const [step, setStep] = useState<1 | 2>(1)
   const [formData, setFormData] = useState<Step1Data>(initialData)
   const [otp, setOtp] = useState("")
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [alert, setAlert] = useState<{
     open: boolean
     type: "success" | "error"
@@ -34,6 +35,7 @@ export function SignupForm() {
   }>({ open: false, type: "success", title: "" })
 
   const handleStep1Next = async () => {
+    setIsSubmitting(true)
     try {
       await sendOtp(formData.email)
       setStep(2)
@@ -44,6 +46,8 @@ export function SignupForm() {
         title: "Failed to send code",
         description: err instanceof Error ? err.message : "Please try again",
       })
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -89,7 +93,7 @@ export function SignupForm() {
   return (
     <AuthCard>
       {step === 1 ? (
-        <SignupStep1 data={formData} onChange={setFormData} onNext={handleStep1Next} />
+        <SignupStep1 data={formData} onChange={setFormData} onNext={handleStep1Next} loading={isSubmitting} />
       ) : (
         <SignupStep2
           email={formData.email}

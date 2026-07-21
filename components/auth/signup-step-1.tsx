@@ -29,11 +29,12 @@ interface SignupStep1Props {
   data: Step1Data
   onChange: (data: Step1Data) => void
   onNext: () => void
+  loading?: boolean
 }
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-export function SignupStep1({ data, onChange, onNext }: SignupStep1Props) {
+export function SignupStep1({ data, onChange, onNext, loading }: SignupStep1Props) {
   const [errors, setErrors] = useState<Step1Errors>({})
   const [usernameStatus, setUsernameStatus] = useState<"idle" | "checking" | "available" | "taken">("idle")
 
@@ -151,7 +152,7 @@ export function SignupStep1({ data, onChange, onNext }: SignupStep1Props) {
           className={inputClass("username")}
         />
         {data.username && usernameStatus === "available" && (
-          <p className="text-[10px] text-accent-green">Username is available</p>
+          <p className="text-[10px] text-primary">Username is available</p>
         )}
         {data.username && usernameStatus === "taken" && (
           <p className="text-[10px] text-accent-red">Username is already taken</p>
@@ -207,8 +208,8 @@ export function SignupStep1({ data, onChange, onNext }: SignupStep1Props) {
         </div>
       </div>
 
-      <Button type="submit" className="mt-2 w-full py-2.5">
-        Continue
+      <Button type="submit" disabled={loading} className="mt-2 w-full py-2.5">
+        {loading ? "Sending code..." : "Continue"}
       </Button>
     </form>
   )
