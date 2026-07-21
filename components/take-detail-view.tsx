@@ -171,7 +171,7 @@ export function TakeDetailView({ initialTake }: { initialTake: Take }) {
               {editHashtags.map((tag) => (
                 <span
                   key={tag}
-                  className="inline-flex items-center gap-1 rounded-lg border border-white/15 bg-secondary px-1.5 py-0.5 text-[10px] font-semibold text-secondary-foreground"
+                  className="inline-flex items-center gap-1 rounded border border-white/15 bg-secondary px-1.5 py-0.5 text-[10px] font-semibold text-secondary-foreground"
                 >
                   #{tag}
                   <button
@@ -200,7 +200,7 @@ export function TakeDetailView({ initialTake }: { initialTake: Take }) {
                 {take.hashtags.map((tag) => (
                   <span
                     key={tag}
-                    className="inline-flex items-center rounded-lg border border-white/15 bg-secondary px-1.5 py-0.5 text-[10px] font-semibold text-secondary-foreground"
+                    className="inline-flex items-center rounded border border-white/15 bg-secondary px-1.5 py-0.5 text-[10px] font-semibold text-secondary-foreground"
                   >
                     #{tag}
                   </span>

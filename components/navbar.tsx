@@ -48,13 +48,13 @@ export function Navbar() {
               </Link>
               
               <DropdownMenu>
-                <DropdownMenuTrigger className="outline-none">
+                <DropdownMenuTrigger className="outline-none cursor-pointer">
                   <Avatar>
                     <AvatarImage src={avatarUrl(user.username)} alt={user.name} />
                     <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="min-w-48 rounded-none border border-border bg-card p-1 shadow-[4px_4px_0px_oklch(0_0_0_/_20%)]">
+                <DropdownMenuContent align="end" className="min-w-48 rounded border border-border bg-card p-1 shadow-[4px_4px_0px_oklch(0_0_0_/_20%)]">
                   <div className="flex items-center gap-3 px-2 py-2">
                     <Avatar size="lg">
                       <AvatarImage src={avatarUrl(user.username)} alt={user.name} />
@@ -66,13 +66,13 @@ export function Navbar() {
                     </div>
                   </div>
                   <DropdownMenuSeparator className="my-1 h-px bg-border" />
-                  <DropdownMenuItem className="rounded-none outline-none">
+                  <DropdownMenuItem className="rounded outline-none">
                     <Link href="/profile/me" className="flex items-center gap-2 px-2 py-1.5 text-xs font-semibold w-full hover:text-primary transition-colors">
                       <UserIcon className="size-3.5" />
                       Profile
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="rounded-none outline-none">
+                  <DropdownMenuItem className="rounded outline-none">
                     <Link href="/settings" className="flex items-center gap-2 px-2 py-1.5 text-xs font-semibold w-full hover:text-primary transition-colors">
                       <GearIcon className="size-3.5" />
                       Settings
@@ -81,7 +81,7 @@ export function Navbar() {
                   <DropdownMenuSeparator className="my-1 h-px bg-border" />
                   <DropdownMenuItem
                     onClick={handleLogout}
-                    className="flex cursor-pointer items-center gap-2 rounded-none px-4 py-3 text-xs text-accent-red hover:bg-muted outline-none"
+                    className="flex cursor-pointer items-center gap-2 rounded px-4 py-3 text-xs text-accent-red hover:bg-muted outline-none"
                   >
                     <SignOut className="size-3.5" />
                     Log out
@@ -91,7 +91,7 @@ export function Navbar() {
             </>
 
           ) : (
-            <Link href="/login" className="inline-flex items-center rounded-none border border-border px-3 py-1.5 text-xs font-semibold hover:bg-muted transition-colors">
+            <Link href="/login" className="inline-flex items-center rounded border border-border px-3 py-1.5 text-xs font-semibold hover:bg-muted transition-colors">
               Log In
             </Link>
           )}

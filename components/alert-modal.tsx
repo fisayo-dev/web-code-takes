@@ -43,7 +43,7 @@ export function AlertModal({ open, onClose, type, title, description }: AlertMod
       ref={dialogRef}
       onClose={onClose}
       className={cn(
-        "backdrop:bg-black/50 p-0 m-auto rounded-none",
+        "backdrop:bg-black/50 p-0 m-auto rounded",
         "open:animate-in open:fade-in-0 open:zoom-in-95",
         "closing:animate-out closing:fade-out-0 closing:zoom-out-95",
       )}

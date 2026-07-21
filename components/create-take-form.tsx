@@ -93,7 +93,7 @@ export function CreateTakeForm() {
             {hashtags.map((tag) => (
               <span
                 key={tag}
-                className="inline-flex items-center gap-1 rounded-[4px] border border-white/15 bg-secondary px-1.5 py-0.5 text-[10px] font-semibold text-secondary-foreground"
+                className="inline-flex items-center gap-1 rounded border border-white/15 bg-secondary px-1.5 py-0.5 text-[10px] font-semibold text-secondary-foreground"
               >
                 #{tag}
                 <button
