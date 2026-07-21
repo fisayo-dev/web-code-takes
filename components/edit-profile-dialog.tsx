@@ -37,7 +37,7 @@ export function EditProfileDialog({ open, onClose, profile, onUpdate }: EditProf
       ref={dialogRef}
       onClose={onClose}
       className={cn(
-        "backdrop:bg-black/80 backdrop:blur-2xl p-0 m-auto rounded",
+        "backdrop:bg-black/80 backdrop:blur-2xl p-0 m-auto bg-transparent ",
         "open:animate-in open:fade-in-0 open:zoom-in-95",
         "closing:animate-out closing:fade-out-0 closing:zoom-out-95",
       )}
@@ -45,7 +45,7 @@ export function EditProfileDialog({ open, onClose, profile, onUpdate }: EditProf
       <div className="relative w-auto md:w-lg p-6 neo-card bg-card">
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 p-1 hover:bg-muted rounded text-muted-foreground hover:text-white"
+          className="cursor-pointer absolute top-3 right-3 p-1 hover:bg-muted rounded text-muted-foreground hover:text-white"
           aria-label="Close"
         >
           <X className="size-4" />

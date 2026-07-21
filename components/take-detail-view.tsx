@@ -220,7 +220,7 @@ export function TakeDetailView({ initialTake }: { initialTake: Take }) {
         <div className="flex items-center gap-4 text-muted-foreground border-t border-border pt-3">
           <button
             onClick={handleVote}
-            className={`flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wide transition-colors ${
+            className={`rounded-full p-2 hover:bg-secondary cursor-pointer flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wide transition-colors ${
               take.hasVoted ? "text-primary" : "hover:text-primary"
             }`}
           >
