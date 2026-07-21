@@ -148,3 +148,11 @@ export function createComment(takeId: string, text: string) {
 export function deleteComment(commentId: string) {
   return unwrap(api.delete<ApiResponse>(`/comments/${commentId}`))
 }
+
+export function updateProfile(data: { name?: string; username?: string }) {
+  return unwrap<User>(api.patch<ApiResponse<User>>("/users/me", data))
+}
+
+export function deleteAccount() {
+  return unwrap(api.delete<ApiResponse>("/users/me"))
+}

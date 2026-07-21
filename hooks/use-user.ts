@@ -47,5 +47,12 @@ export function useUser() {
     setIsLoading(false)
   }
 
-  return { user, isLoading, isAuthenticated: !!user, reset }
+  function updateCachedUser(updater: (prev: User) => User) {
+    if (cachedUser) {
+      cachedUser = updater(cachedUser)
+      setUser(cachedUser)
+    }
+  }
+
+  return { user, isLoading, isAuthenticated: !!user, reset, updateCachedUser }
 }
