@@ -1,11 +1,10 @@
-import { cookies } from "next/headers"
 import type { ApiResponse, Take, User } from "./types"
+import { getServerAuthToken } from "./server-auth"
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL!
 
 async function serverFetch<T>(path: string): Promise<T> {
-  const cookieStore = await cookies()
-  const token = cookieStore.get("session")?.value
+  const token = await getServerAuthToken()
 
   const headers: Record<string, string> = {
     "Content-Type": "application/json",

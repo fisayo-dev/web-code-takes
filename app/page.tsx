@@ -1,14 +1,13 @@
 import { redirect } from "next/navigation"
-import { cookies } from "next/headers"
 import { LandingHeader } from "@/components/home/landing-header"
 import { HeroSection } from "@/components/home/hero-section"
 import { TrendingTakes } from "@/components/home/trending-takes"
 import { SupportSection } from "@/components/home/support-section"
 import { Footer } from "@/components/footer"
+import { getServerAuthToken } from "@/lib/server-auth"
 
 export default async function RootPage() {
-  const cookieStore = await cookies()
-  const hasSession = cookieStore.has("session")
+  const hasSession = !!(await getServerAuthToken())
 
   if (hasSession) {
     redirect("/feed")

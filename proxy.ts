@@ -3,7 +3,7 @@ import { NextResponse, type NextRequest } from "next/server"
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  const hasSession = request.cookies.has("session")
+  const hasSession = request.cookies.has("session") || request.cookies.has("auth_token")
 
   if (pathname === "/login" || pathname === "/signup") {
     if (hasSession) {
