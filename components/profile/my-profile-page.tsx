@@ -18,13 +18,14 @@ export function MyProfilePage() {
     if (!user) return
 
     let cancelled = false
+    const username = user.username
 
     async function loadProfile() {
       setError(undefined)
       setIsLoadingTakes(true)
 
       try {
-        const result = await getTakesByUsername(user.username)
+        const result = await getTakesByUsername(username)
         if (cancelled) return
         setTakes(result.items)
         setTotalTakes(result.total)
