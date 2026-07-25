@@ -11,7 +11,7 @@ function setTokenCookie(t: string) {
 }
 
 function clearTokenCookie() {
-  document.cookie = `${TOKEN_COOKIE}=; path=/; max-age=0`
+  document.cookie = `${TOKEN_COOKIE}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax`
 }
 
 export function setAuthToken(t: string) {
